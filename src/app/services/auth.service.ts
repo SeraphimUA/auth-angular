@@ -1,7 +1,7 @@
 import { map, tap } from "rxjs/operators";
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface myToken {
   token: string
@@ -30,7 +30,7 @@ export class AuthService {
 
   constructor(private readonly client: HttpClient) { }
 
-  login(loginModel: LoginModel) {
+  login(loginModel: LoginModel): Observable<TokenData> {
     return this.client
       .post<myToken>(this.apiUrl, loginModel)
       .pipe(

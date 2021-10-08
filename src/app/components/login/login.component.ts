@@ -22,12 +22,12 @@ export class LoginComponent {
 
   onSubmit() {
     this.authService.login(this.loginData)
-      .subscribe(() => {
+      .subscribe((tokenData) => {
         this.isLoggedIn = true;
-        this.userId = this.authService.tokenData$.value?.userId;
-        this.userName = this.authService.tokenData$.value?.username;
-        this.notBefore.setTime(new Date(this.authService.tokenData$.value.notBefore).getTime()*1000);
-        this.expires.setTime(new Date(this.authService.tokenData$.value.expires).getTime()*1000);
+        this.userId = tokenData.userId;
+        this.userName = tokenData.username;
+        this.notBefore.setTime(new Date(tokenData.notBefore).getTime()*1000);
+        this.expires.setTime(new Date(tokenData.expires).getTime()*1000);
       });
   }
 
