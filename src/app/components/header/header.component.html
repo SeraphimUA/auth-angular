@@ -1,0 +1,13 @@
+<nav>
+    <div *ngIf="isLoggedIn(); then LoggedIn else NotLoggedIn"></div>
+</nav>
+
+<ng-template #LoggedIn>
+        <a routerLink='isUser'>Check User Access</a>
+        <a routerLink='userlist'>Users list</a>
+        <a routerLink='logout'>Logout</a>
+</ng-template>
+
+<ng-template #NotLoggedIn>
+    <a routerLink='login'>Login</a>
+</ng-template>

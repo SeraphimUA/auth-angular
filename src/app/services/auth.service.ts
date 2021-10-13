@@ -7,11 +7,17 @@ export interface myToken {
   token: string
 }
 
+export enum Permission {
+  AccessAdmin,
+  AccessUser,
+}
+
 export interface TokenData {
   userId: number,
   username: string,
   notBefore: Date,
   expires: Date,
+  permissions: Permission[],
 }
 
 export interface LoginModel {
@@ -39,8 +45,14 @@ export class AuthService {
           const tokenData = this.readToken(t);
           this.tokenData$.next(tokenData);
           return tokenData
-        })
+        }),
+        tap(t => console.log(t.permissions.includes(Permission.AccessUser)))
       );
+  }
+
+  logout() {
+    this.token$.next(null);
+    this.tokenData$.next(null);
   }
 
   private readToken(token: myToken): TokenData {
@@ -54,11 +66,18 @@ export class AuthService {
     const notBefore = dataJson["nbf"];
     const expires = dataJson["exp"];
 
+    const permissionsData = dataJson["permissions"];
+    const permissions = typeof permissionsData === 'string'
+      ? [Permission[permissionsData]]
+      : permissionsData
+        .map(p => Permission[p]);
+
     return {
       userId,
       username,
       notBefore,
-      expires
+      expires,
+      permissions
     }
   }
 }

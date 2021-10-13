@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService, LoginModel } from 'src/app/services/auth.service';
 
 @Component({
@@ -18,7 +19,8 @@ export class LoginComponent {
   notBefore = new Date();
   expires = new Date();
 
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService,
+    private router: Router) { }
 
   onSubmit() {
     this.authService.login(this.loginData)
@@ -28,14 +30,13 @@ export class LoginComponent {
         this.userName = tokenData.username;
         this.notBefore.setTime(new Date(tokenData.notBefore).getTime()*1000);
         this.expires.setTime(new Date(tokenData.expires).getTime()*1000);
+        this.router.navigate(['']);
       });
   }
 
-  // private convertDate(d: Date) {
-  //   console.log(`function convertDate: d = ${d}`);
-  //   let milliseconds = d.getTime()*1000;
-  //   console.log(`function convertDate: milliseconds = ${milliseconds}`);
-  //   return new Date(milliseconds);
-  // }
+  logout() {
+    this.authService.logout();
+    this.isLoggedIn = false;
+  }
 
 }
